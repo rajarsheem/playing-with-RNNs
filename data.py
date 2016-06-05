@@ -13,7 +13,7 @@ def sample(data, seq_size):
 
 
 def get_data(vocab_size):
-    f = open('input.txt','r').read()
+    f = open('input2.txt','r').read()
     f = f.replace('\n',' eos ')
     id_to_token = {0 : 'unk'}
     words = nltk.word_tokenize(f)
