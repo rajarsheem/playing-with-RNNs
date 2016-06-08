@@ -4,6 +4,7 @@ import numpy as np
 from os import listdir
 import codecs
 from random import randint
+import tensorflow as tf
 # import pandas
 
 def sample(data, seq_size):
@@ -18,7 +19,7 @@ def get_data(vocab_size):
     id_to_token = {0 : 'unk'}
     words = nltk.word_tokenize(f)
     l = len(set(words))
-    print l
+    print(l)
     if vocab_size == -1:
         vocab_size = l
     assert vocab_size <= l
@@ -39,15 +40,26 @@ def hello():
     dirrs = ['sentiment/train/', 'sentiment/test/']
     sent = []
     for dirr in dirrs:
-        print dirr
+        print(dirr)
         l = listdir(dirr+'pos')
-        print 'pos'
+        print('pos')
         for r in l:
             t = codecs.open(dirr+'pos/'+r,'r',encoding='utf8').read()
             sent.append(nltk.word_tokenize(t))
         l = listdir(dirr+'neg')
-        print 'neg'
+        print('neg')
         for r in l:
             t = codecs.open(dirr+'neg/'+r,'r',encoding='utf8').read()
             sent.append(nltk.word_tokenize(t))
     return sent
+
+def readseq(name):
+    idd, seq = [], []
+    with open(name) as f:
+        for row in f:
+            if 'Id' in row:
+                continue
+            r = row.split('"')
+            idd.append(int(r[0][:-1]))
+            seq.append(list(map(int, r[1].split(','))))
+    return idd, seq
