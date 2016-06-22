@@ -1,22 +1,22 @@
+# helper functions for all notebooks
+
 import nltk
 from collections import Counter
 import numpy as np
 from os import listdir
 import codecs
 from random import randint
-import tensorflow as tf
-# import pandas
+
 
 def sample(data, seq_size):
-    x, y = [], []
     idx = randint(0, len(data) - seq_size - 1)
-    return np.array(data[idx : idx + seq_size]), np.array(data[idx + 1 : idx + 1 + seq_size])
+    return np.array(data[idx: idx + seq_size]), np.array(data[idx + 1: idx + 1 + seq_size])
 
 
 def get_data(vocab_size):
-    f = open('input2.txt','r').read()
-    f = f.replace('\n',' eos ')
-    id_to_token = {0 : 'unk'}
+    f = codecs.open('input2.txt', 'r', encoding='utf8').read()
+    f = f.replace('\n', ' eos ')
+    id_to_token = {0: 'unk'}
     words = nltk.word_tokenize(f)
     l = len(set(words))
     print(l)
@@ -31,27 +31,39 @@ def get_data(vocab_size):
         if word in vocab:
             temp[vocab.index(word) + 1] = 1
             id_to_token[vocab.index(word) + 1] = word
-        else: # unk
+        else:  # unk
             temp[0] = 1
         data.append(temp)
     return data, id_to_token
+
 
 def hello():
     dirrs = ['sentiment/train/', 'sentiment/test/']
     sent = []
     for dirr in dirrs:
         print(dirr)
-        l = listdir(dirr+'pos')
+        l = listdir(dirr + 'pos')
         print('pos')
         for r in l:
-            t = codecs.open(dirr+'pos/'+r,'r',encoding='utf8').read()
+            t = codecs.open(dirr + 'pos/' + r, 'r', encoding='utf8').read()
             sent.append(nltk.word_tokenize(t))
-        l = listdir(dirr+'neg')
+        l = listdir(dirr + 'neg')
         print('neg')
         for r in l:
-            t = codecs.open(dirr+'neg/'+r,'r',encoding='utf8').read()
+            t = codecs.open(dirr + 'neg/' + r, 'r', encoding='utf8').read()
             sent.append(nltk.word_tokenize(t))
     return sent
+
+
+# currently using one-hot.
+def get_char_embedding():
+    f = codecs.open('input2.txt', 'r', encoding='utf-8').read()
+    chars = set(f)
+    mat = np.zeros([len(chars), len(chars)])
+    np.fill_diagonal(mat, 1)
+    char_to_id = {k: v for v, k in enumerate(chars)}
+    return char_to_id, mat
+
 
 def readseq(name):
     idd, seq = [], []
@@ -63,3 +75,5 @@ def readseq(name):
             idd.append(int(r[0][:-1]))
             seq.append(list(map(int, r[1].split(','))))
     return idd, seq
+
+get_char_embedding()
