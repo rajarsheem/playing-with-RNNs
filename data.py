@@ -2,6 +2,7 @@
 
 import nltk
 from collections import Counter
+from nltk.tokenize import RegexpTokenizer
 import numpy as np
 from os import listdir
 import codecs
@@ -14,10 +15,13 @@ def sample(data, seq_size):
 
 
 def get_data(vocab_size):
+    tzr = RegexpTokenizer(r'\w+')
     f = codecs.open('input2.txt', 'r', encoding='utf8').read()
-    f = f.replace('\n', ' eos ')
+    # f = f.replace('\n', ' eos ')
     id_to_token = {0: 'unk'}
-    words = nltk.word_tokenize(f)
+    words = tzr.tokenize(f)
+    words = list(map(lambda x: x.lower(), words))
+    print(words[:40])
     l = len(set(words))
     print(l)
     if vocab_size == -1:
@@ -76,4 +80,4 @@ def readseq(name):
             seq.append(list(map(int, r[1].split(','))))
     return idd, seq
 
-get_char_embedding()
+get_data(1681)
