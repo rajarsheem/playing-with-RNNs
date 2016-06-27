@@ -19,7 +19,7 @@ def get_data(vocab_size):
     f = codecs.open('input2.txt', 'r', encoding='utf8').read()
     # f = f.replace('\n', ' eos ')
     id_to_token = {0: 'unk'}
-    words = tzr.tokenize(f)
+    words = nltk.word_tokenize(f)
     words = list(map(lambda x: x.lower(), words))
     print(words[:40])
     l = len(set(words))
@@ -63,6 +63,8 @@ def hello():
 def get_char_embedding():
     f = codecs.open('input2.txt', 'r', encoding='utf-8').read()
     chars = set(f)
+    chars = [i.lower() for i in chars]
+    print(chars)
     mat = np.zeros([len(chars), len(chars)])
     np.fill_diagonal(mat, 1)
     char_to_id = {k: v for v, k in enumerate(chars)}
@@ -80,4 +82,4 @@ def readseq(name):
             seq.append(list(map(int, r[1].split(','))))
     return idd, seq
 
-get_data(1681)
+get_char_embedding()
