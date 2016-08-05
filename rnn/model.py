@@ -4,7 +4,6 @@ import tensorflow as tf
 class Model(object):
 
     def __init__(self, input_shape=None):
-
         self.initial_state = tf.placeholder(
             shape=input_shape, dtype=tf.float32)
         self.current_state = self.initial_state
@@ -13,6 +12,7 @@ class Model(object):
     def add(self, layer):
         layer.incoming = self.current_state
         layer.input_size = self.last_size
+        layer.create_variables()
         layer_output = layer.build_model()
         self.current_state = layer_output
         self.last_size = layer.hidden_dim

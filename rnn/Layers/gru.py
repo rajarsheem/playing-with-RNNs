@@ -9,14 +9,8 @@ class GRU(Recurrent):
         self.hidden_dim = hidden_dim
         super(GRU, self).__init__(self.hidden_dim)
 
-    def build_model(self):
-        self.Wxh = tf.Variable(tf.random_normal(
-            [self.input_size, self.hidden_dim],
-            stddev=1.0 / math.sqrt(self.input_size)), dtype=tf.float32)
-        self.Whh = tf.Variable(tf.random_normal(
-            [self.hidden_dim, self.hidden_dim],
-            stddev=1.0 / math.sqrt(self.hidden_dim)), dtype=tf.float32)
-
+    def create_variables(self):
+        super(GRU, self).create_variables()
         # weights associated with update gate
         self.Wxz = tf.Variable(tf.random_normal(shape=[
             self.input_size, self.hidden_dim],
@@ -33,11 +27,11 @@ class GRU(Recurrent):
             self.hidden_dim, self.hidden_dim],
             stddev=1.0 / math.sqrt(self.hidden_dim)), dtype=tf.float32)
 
-        initial = tf.zeros(shape=[self.hidden_dim], dtype=tf.float32)
-        states = tf.scan(self.recurrence, self.incoming, initializer=initial)
-        return states
+    def build_model(self):
+        return super(GRU, self).build_model()
 
     def recurrence(self, prev, inp):
+        print(type(self).__name__)
         i = tf.reshape(inp, shape=[1, -1])
         p = tf.reshape(prev, shape=[1, -1])
         z = tf.nn.sigmoid(tf.matmul(i, self.Wxz) +

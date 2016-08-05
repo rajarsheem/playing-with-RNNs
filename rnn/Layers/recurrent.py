@@ -12,7 +12,7 @@ class Recurrent(object):
             minval=-0.01, maxval=0.01, dtype=tf.float32)
         print('RNN initialized :', type(self).__name__)
 
-    def build_model(self):
+    def create_variables(self):
         self.Wxh = tf.Variable(tf.random_normal(
             [self.input_size, self.hidden_dim],
             stddev=1.0 / math.sqrt(self.input_size)), dtype=tf.float32)
@@ -20,11 +20,13 @@ class Recurrent(object):
             [self.hidden_dim, self.hidden_dim],
             stddev=1.0 / math.sqrt(self.hidden_dim)), dtype=tf.float32)
 
+    def build_model(self):
         initial = tf.zeros(shape=[self.hidden_dim], dtype=tf.float32)
         states = tf.scan(self.recurrence, self.incoming, initializer=initial)
         return states
 
     def recurrence(self, prev, inp):
+        print(type(self).__name__)
         i = tf.reshape(inp, shape=[1, -1])
         p = tf.reshape(prev, shape=[1, -1])
         h = tf.tanh((tf.matmul(p, self.Whh)) +
