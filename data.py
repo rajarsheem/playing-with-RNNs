@@ -16,7 +16,7 @@ def sample(data, seq_size):
 
 def get_data(vocab_size):
     tzr = RegexpTokenizer(r'\w+')
-    f = codecs.open('input2.txt', 'r', encoding='utf8').read()
+    f = codecs.open('nav_input.txt', 'r', encoding='utf8').read()
     # f = f.replace('\n', ' eos ')
     id_to_token = {0: 'unk'}
     words = nltk.word_tokenize(f)
